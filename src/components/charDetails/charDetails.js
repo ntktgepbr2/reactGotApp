@@ -1,30 +1,68 @@
-import React, {Component} from 'react';
-import './charDetails.css';
-export default class CharDetails extends Component {
+import React, { Component } from "react";
+import styled from "styled-components";
 
-    render() {
-        return (
-            <div className="char-details rounded">
-                <h4>John Snow</h4>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Gender</span>
-                        <span>male</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Born</span>
-                        <span>1783</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Died</span>
-                        <span>1820</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Culture</span>
-                        <span>First</span>
-                    </li>
-                </ul>
-            </div>
-        );
-    }
+const Details = styled.div`
+  background-color: #fff;
+  padding: 25px 25px 15px 25px;
+  margin-bottom: 40px;
+`;
+
+const DetailsHeader = styled.h4`
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+`;
+const DetailsUl = styled.ul`
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+`;
+const DetailsLi = styled.li`
+  display: flex !important;
+  justify-content: space-between !important;
+  position: relative;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-right-width: 0;
+  border-left-width: 0;
+  border-radius: 0;
+  &:first-child {
+    border-top-width: 0;
+  }
+  span {
+    font-weight: ${(props) => props.weight};
+  }
+`;
+const DetailsSpan = styled.span`
+  font-weight: ${(props) => props.weight || "400"};
+`;
+export default class CharDetails extends Component {
+  render() {
+    return (
+      <Details>
+        <DetailsHeader>John Snow</DetailsHeader>
+        <DetailsUl>
+          <DetailsLi>
+            <DetailsSpan weight="bold">Gender</DetailsSpan>
+            <DetailsSpan>male</DetailsSpan>
+          </DetailsLi>
+          <DetailsLi>
+            <DetailsSpan weight="bold">Born</DetailsSpan>
+            <DetailsSpan>1783</DetailsSpan>
+          </DetailsLi>
+          <DetailsLi>
+            <DetailsSpan weight="bold">Died</DetailsSpan>
+            <DetailsSpan>1820</DetailsSpan>
+          </DetailsLi>
+          <DetailsLi>
+            <DetailsSpan weight="bold">Culture</DetailsSpan>
+            <DetailsSpan>First</DetailsSpan>
+          </DetailsLi>
+        </DetailsUl>
+      </Details>
+    );
+  }
 }
