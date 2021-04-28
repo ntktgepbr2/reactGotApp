@@ -27,6 +27,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/reactstrap": "^8.7.2",
     "babel-plugin-styled-components": "^1.12.0"
   }
 }

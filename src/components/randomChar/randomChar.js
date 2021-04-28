@@ -42,14 +42,14 @@ export default class RandomChar extends Component {
     });
   };
 
-  updateChar() {
-    // const id = Math.floor(Math.random() * 140 + 25); //рандомное число 25-140
-    const id = 999999999999;
+  updateChar = () => {
+    const id = Math.floor(Math.random() * 140 + 25); //рандомное число 25-140
+
     this.gotService
       .getCharacter(id) //возвращает нужный на вид объекта,подробнее в gotServices
       .then(this.onCharLoaded) //для удобвства вынесли обновление стейта в функцию onCharLoaded
       .catch(this.onError);
-  }
+  };
 
   render() {
     const { char, loading, error } = this.state; //вытаскиваем ключи name gender и т.д из объекта char с помощью деструктуризации
