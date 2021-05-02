@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import gotServices from "../../services/gotServices";
+import ErrorMessage from "../errorMessage";
+import Spinner from "../spinner";
 
 const ItemListUl = styled.ul`
   display: flex;
@@ -20,13 +23,34 @@ const ItemListLi = styled.li`
   border-radius: 0;
 `;
 export default class ItemList extends Component {
+  gotServices = new gotServices();
+
+  state = {
+    charList: null,
+  };
+
+  componentDidMount() {
+    this.gotServices.getAllCharacters().then((charList) => {
+      this.setState({ charList });
+    });
+  }
+
+  renderItems(arr) {
+    return arr.map((item) => {
+      return (
+        <ItemListLi key={item.id} onClick={() => this.props.onCharSelected(item.id)}>
+          {item.name}
+        </ItemListLi>
+      );
+    });
+  }
+
   render() {
-    return (
-      <ItemListUl>
-        <ItemListLi>John Snow</ItemListLi>
-        <ItemListLi>Brandon Stark</ItemListLi>
-        <ItemListLi>Geremy</ItemListLi>
-      </ItemListUl>
-    );
+    const { charList, error } = this.state;
+    if (error) return <ErrorMessage />;
+    if (!charList) return <Spinner />;
+
+    const items = this.renderItems(charList);
+    return <ItemListUl>{items}</ItemListUl>;
   }
 }

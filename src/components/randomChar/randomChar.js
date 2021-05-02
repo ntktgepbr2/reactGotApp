@@ -16,10 +16,6 @@ const RandomBlock = styled.div`
 `;
 
 export default class RandomChar extends Component {
-  constructor() {
-    super();
-    this.updateChar();
-  }
   gotService = new gotServices();
 
   state = {
@@ -27,7 +23,13 @@ export default class RandomChar extends Component {
     loading: true, //пустой объект в который мы сохраним данные с сервера
     error: false,
   };
-
+  componentDidMount() {
+    this.updateChar();
+    this.timerId = setInterval(this.updateChar, 1500);
+  }
+  componentWillUnmount() {
+    clearInterval(this.timerId);
+  }
   onCharLoaded = (char) => {
     this.setState({
       char,
@@ -52,6 +54,7 @@ export default class RandomChar extends Component {
   };
 
   render() {
+    console.log("render");
     const { char, loading, error } = this.state; //вытаскиваем ключи name gender и т.д из объекта char с помощью деструктуризации
     const errorMessage = error ? <ErrorMessage /> : null; //Если мы получаем ошибку - выводим сообщение ErrorMessage
     const spinner = loading ? <Spinner /> : null; //Если loading true - показываем спиннер

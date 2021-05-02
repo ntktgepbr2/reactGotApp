@@ -27,6 +27,7 @@ export default class GotService {
 
   async getCharacter(id) {
     const character = await this.getResource(`/characters/${id}`);
+    // console.log(this._transformCharacter(character));
     return this._transformCharacter(character); //трансформируем одного персонажав в нужный вид функцией _transformCharacter
   }
 
@@ -37,16 +38,32 @@ export default class GotService {
   getHouse(id) {
     return this.getResource(`/houses/${id}/`);
   }
-  _transformCharacter(char) {
+
+  isSet = (data) => {
+    if (data) {
+      return data;
+    } else {
+      return "no data :(";
+    }
+  };
+
+  _extractId = (item) => {
+    const idRegExp = /\/([0-9]*)$/;
+    return item.url.match(idRegExp)[1];
+  };
+
+  _transformCharacter = (char) => {
     //данная функция трансформирует данные (char) в нужный нам вид
     return {
-      name: char.name,
-      gender: char.gender,
-      born: char.born,
-      died: char.died,
-      culture: char.culture,
+      name: this.isSet(char.name),
+      gender: this.isSet(char.gender),
+      born: this.isSet(char.born),
+      died: this.isSet(char.died),
+      culture: this.isSet(char.culture),
+      id: this._extractId(char),
     };
-  }
+  };
+
   _transformHouse(house) {
     //данная функция трансформирует данные (house) в нужный нам вид
     return {

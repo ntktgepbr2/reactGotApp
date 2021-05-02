@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import gotServices from "../../services/gotServices";
+import ErrorMessage from "../errorMessage";
+import Spinner from "../spinner";
 
 const Details = styled.div`
   background-color: #fff;
@@ -39,26 +42,90 @@ const DetailsLi = styled.li`
 const DetailsSpan = styled.span`
   font-weight: ${(props) => props.weight || "400"};
 `;
+
+const SelectionError = styled.span`
+  color: white;
+`;
 export default class CharDetails extends Component {
+  gotServices = new gotServices();
+
+  state = {
+    char: null,
+    loading: true,
+    error: false,
+  };
+
+  componentDidMount() {
+    this.updateChar();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.charId !== prevProps.charId) {
+      this.updateChar();
+    }
+  }
+
+  onCharLoaded = (char) => {
+    this.setState({
+      char,
+      loading: false,
+    });
+  };
+
+  updateChar() {
+    const { charId } = this.props;
+    if (!charId) return;
+
+    this.setState({ loading: true });
+
+    this.gotServices
+      .getCharacter(charId)
+      .then(this.onCharLoaded)
+      .catch(() => this.onError());
+  }
+  // this.foo.bar = 0;
+
+  onError() {
+    this.setState({
+      char: null,
+      error: true,
+    });
+  }
+
   render() {
+    if (!this.state.char && this.state.error) {
+      return <ErrorMessage />;
+    } else if (!this.state.char) {
+      return <span className="select-error">Please select a character</span>;
+    }
+
+    const { name, gender, born, died, culture } = this.state.char;
+
+    if (this.state.loading) {
+      return (
+        <div className="char-details rounded">
+          <Spinner />
+        </div>
+      );
+    }
     return (
       <Details>
-        <DetailsHeader>John Snow</DetailsHeader>
+        <DetailsHeader>{name}</DetailsHeader>
         <DetailsUl>
           <DetailsLi>
             <DetailsSpan weight="bold">Gender</DetailsSpan>
-            <DetailsSpan>male</DetailsSpan>
+            <DetailsSpan>{gender}</DetailsSpan>
           </DetailsLi>
           <DetailsLi>
-            <DetailsSpan weight="bold">Born</DetailsSpan>
+            <DetailsSpan weight="bold">{born}</DetailsSpan>
             <DetailsSpan>1783</DetailsSpan>
           </DetailsLi>
           <DetailsLi>
-            <DetailsSpan weight="bold">Died</DetailsSpan>
+            <DetailsSpan weight="bold">{died}</DetailsSpan>
             <DetailsSpan>1820</DetailsSpan>
           </DetailsLi>
           <DetailsLi>
-            <DetailsSpan weight="bold">Culture</DetailsSpan>
+            <DetailsSpan weight="bold">{culture}</DetailsSpan>
             <DetailsSpan>First</DetailsSpan>
           </DetailsLi>
         </DetailsUl>
